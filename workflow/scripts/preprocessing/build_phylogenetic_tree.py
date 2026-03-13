@@ -39,7 +39,7 @@ def build_tree(fasta_file):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python build_phylogenetic_tree.py <input_fasta_file> <output_tree_file>")
+        print("Usage: python build_phylogenetic_tree.py <input_fasta_file>")
         sys.exit(1)
     
     fasta_file = sys.argv[1]
