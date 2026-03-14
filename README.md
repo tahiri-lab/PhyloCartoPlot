@@ -93,7 +93,7 @@ Next step instructions
 
 ---
 
-## The Tool is Generic!
+## The Tool is Generic
 
 PhyloCartoPlot now works with:
 - Any phylogenetic tree
