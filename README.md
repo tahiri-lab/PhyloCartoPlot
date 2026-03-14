@@ -56,7 +56,7 @@ jupyter notebook examples/02_tree_to_map_raster_walkthrough.ipynb
 1. Read the main **README.md** 
 
 
-### For Learning by Doing
+### Tutorial
 1. Open **01_phylocartoplot_walkthrough.ipynb** (examples folder)
 2. Follow cells step-by-step
 3. Execute and inspect outputs
