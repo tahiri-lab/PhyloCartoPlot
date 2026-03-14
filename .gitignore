@@ -39,7 +39,7 @@ share/python-wheels/
 *.fasta
 *.nwk
 
-output/
+
 images/
 *.png
 *.svg
