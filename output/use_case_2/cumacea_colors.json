@@ -1,0 +1,24 @@
+{
+  "color_map": {
+    "1": "red",
+    "2": "blue",
+    "3": "green",
+    "4": "purple",
+    "5": "orange",
+    "6": "cyan",
+    "7": "magenta",
+    "8": "grey",
+    "9": "brown"
+  },
+  "color_to_label": {
+    "red": "Bassin d'Islande",
+    "blue": "Bassin d'Irminger",
+    "green": "Détroit du Danemark",
+    "purple": "Détroit du Danemark (Purple)",
+    "orange": "Bassin Norvégien",
+    "cyan": "Détroit du Danemark (Cyan)",
+    "magenta": "Mer de Norvège",
+    "grey": "Mer de Norvège (Grey)",
+    "brown": "Bassin d'Irminger (Brown)"
+  }
+}

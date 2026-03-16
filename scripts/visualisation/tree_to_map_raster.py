@@ -197,6 +197,9 @@ class PhyloCartoPlotter:
         vmin=None,
         vmax=None,
         trait_name="Trait Value",
+        color_map=None,
+        color_to_label=None,
+        legend_config=None,
         verbose=True,
     ):
         """
@@ -215,6 +218,26 @@ class PhyloCartoPlotter:
             vmin: Trait value colormap minimum (auto-calculated if None)
             vmax: Trait value colormap maximum (auto-calculated if None)
             trait_name: Name of the trait for labels
+            color_map: Dict mapping numeric trait_value to colors (e.g., {1: "red", 2: "blue"}).
+                Required if legend_config['show_legend']=True. If None, uses continuous colormap.
+            color_to_label: Dict mapping colors to categorical labels 
+                (e.g., {"red": "Bassin d'Islande", "blue": "Bassin d'Irminger"}).
+                Required if legend_config['show_legend']=True.
+            legend_config: Dict with legend customizations. If provided with show_legend=True,
+                displays categorical legend and hides colorbar. Valid keys:
+                - 'show_legend': Enable legend (bool, default: False)
+                - 'loc': Position ('lower right', 'upper left', etc.)
+                - 'fontsize': Label font size (int, default: 10)
+                - 'title_fontsize': Title font size (int, default: 12)
+                - 'title': Legend title (str or None, default: None)
+                - 'frameon': Show border (bool, default: True)
+                - 'markerscale': Marker scaling factor (float, default: 1.2)
+                - 'marker_size': Circle size (int, default: 8)
+                - 'marker_edge_color': Outline color (str, default: 'black')
+                - 'framealpha': Background transparency (0-1, default: 0.9)
+                - 'edgecolor': Border color (str, default: 'black')
+                - 'fancybox': Rounded corners (bool, default: True)
+                - 'shadow': Drop shadow (bool, default: False)
             verbose: Print progress messages (default: True)
         """
         self.nwk_file = nwk_file
@@ -230,6 +253,34 @@ class PhyloCartoPlotter:
         self.vmax = vmax
         self.trait_name = trait_name
         self.verbose = verbose
+
+        # ===== COLOR MAPPINGS FOR CATEGORICAL LEGEND =====
+        self.color_map = color_map or {}  # {numeric_value: color}
+        self.color_to_label = color_to_label or {}  # {color: label}
+        # ===================================================
+
+        # ===== LEGEND CONFIGURATION =====
+        self.legend_config = {
+            'show_legend': False,              # Legend disabled by default
+            'loc': 'lower left',               # Position
+            'bbox_to_anchor': (0.01, 0.01),   # Normalized coords: (x, y) for lower left
+            'fontsize': 10,                    # Label font size
+            'title_fontsize': 12,              # Title font size
+            'title': None,                     # Legend title (None = no title)
+            'frameon': True,                   # Border around legend
+            'markerscale': 1.2,                # Marker size scaling
+            'marker_size': 8,                  # Circle marker size
+            'marker_edge_color': 'black',      # Outline color
+            'framealpha': 0.9,                 # Legend background transparency
+            'edgecolor': 'black',              # Legend border color
+            'fancybox': True,                  # Rounded corners
+            'shadow': False,                   # Drop shadow
+        }
+        
+        # Override defaults with user-provided config
+        if legend_config is not None:
+            self.legend_config.update(legend_config)
+        # ================================
 
         # Data containers
         self.tree = None
@@ -267,6 +318,16 @@ class PhyloCartoPlotter:
         self.gps = pd.read_csv(self.gps_file)
         if self.verbose:
             print(f"  ✓ Loaded {len(self.gps)} GPS records")
+
+        # Apply color mapping if provided
+        if self.color_map:
+            self.gps['color'] = self.gps['trait_value'].map(self.color_map)
+            if self.gps['color'].isna().any():
+                missing_values = self.gps[self.gps['color'].isna()]['trait_value'].unique()
+                if self.verbose:
+                    print(f"  ⚠ Warning: Some trait_values not in color_map: {missing_values}")
+            if self.verbose:
+                print(f"  ✓ Applied color mapping to GPS records")
 
         # Load offsets
         offsets_df = pd.read_csv(self.offset_file)
@@ -411,17 +472,33 @@ class PhyloCartoPlotter:
     def _get_x_offset(self, node_name):
         """Get x-axis offset for a node."""
         return self.offsets_dict.get(node_name, 0)
+    
+    def _get_color_from_trait(self, trait_value):
+        """Get color from trait_value using color_map.
+        
+        If color_map is provided, use it. Otherwise return grey.
+        """
+        if self.color_map is None:
+            return "grey"
+        
+        # Convert trait_value to int if it's a float ending in .0
+        if isinstance(trait_value, float) and trait_value == int(trait_value):
+            trait_value = int(trait_value)
+        
+        return self.color_map.get(trait_value, "grey")
 
     def _plot_adjusted_node(self, ax, node, y_offset):
-        """Plot a single tree node with color from GPS data."""
+        """Plot a single tree node with color from color_map."""
         x, y = node.position
         x_offset = self._get_x_offset(node.name)
         x += x_offset
         y += y_offset
 
+        # Get color from color_map based on trait_value
         color = "grey"
         if node.name in self.gps["specimen_id"].values:
-            color = self.gps[self.gps["specimen_id"] == node.name]["color"].values[0]
+            trait_value = self.gps[self.gps["specimen_id"] == node.name]["trait_value"].values[0]
+            color = self._get_color_from_trait(trait_value)
 
         ax.plot(
             x,
@@ -452,24 +529,38 @@ class PhyloCartoPlotter:
 
         # Build text colors dictionary
         valmap = dict(zip(self.gps["specimen_id"], self.gps["trait_value"]))
-        base = plt.get_cmap("viridis")
-        newcolors = base(np.linspace(0, 0.8, 256))
-        viridis_no_yellow = mcolors.ListedColormap(newcolors, name="viridis_no_yellow")
-        cmap_rev = viridis_no_yellow.reversed()
-        norm = mcolors.Normalize(vmin=self.vmin, vmax=self.vmax)
-
-        text_colors = {
-            raw: (
-                "grey"
-                if valmap[raw] == 0.0
-                else (
-                    mcolors.to_hex(cmap_rev(norm(valmap[raw])))
-                    if self.vmin < valmap[raw] < self.vmax
-                    else "black"
+        
+        # Use categorical colors if color_map is provided and legend is enabled
+        if self.color_map and self.legend_config.get('show_legend', False):
+            # Categorical colors from color_map
+            text_colors = {
+                specimen_id: (
+                    "grey"
+                    if valmap[specimen_id] == 0.0
+                    else self._get_color_from_trait(valmap[specimen_id])
                 )
-            )
-            for raw in self.gps["specimen_id"]
-        }
+                for specimen_id in self.gps["specimen_id"]
+            }
+        else:
+            # Continuous colors from colormap (default behavior)
+            base = plt.get_cmap("viridis")
+            newcolors = base(np.linspace(0, 0.8, 256))
+            viridis_no_yellow = mcolors.ListedColormap(newcolors, name="viridis_no_yellow")
+            cmap_rev = viridis_no_yellow.reversed()
+            norm = mcolors.Normalize(vmin=self.vmin, vmax=self.vmax)
+
+            text_colors = {
+                raw: (
+                    "grey"
+                    if valmap[raw] == 0.0
+                    else (
+                        mcolors.to_hex(cmap_rev(norm(valmap[raw])))
+                        if self.vmin < valmap[raw] < self.vmax
+                        else "black"
+                    )
+                )
+                for raw in self.gps["specimen_id"]
+            }
 
         # Plot tree
         Phylo.draw(
@@ -481,7 +572,7 @@ class PhyloCartoPlotter:
         )
 
         for txt in self.ax_tree.texts:
-            txt.set_fontsize(24)
+            txt.set_fontsize(14)  # Increased from 12 to 14 for better visibility in raster
             txt.set_fontstyle("italic")
 
         self.ax_tree.set_frame_on(False)
@@ -565,52 +656,98 @@ class PhyloCartoPlotter:
             if self.verbose:
                 print(f"  ✓ Map plotted")
 
+        # Build colormap for continuous gradient (used when not using categorical legend)
+        base = plt.get_cmap("viridis")
+        newcolors = base(np.linspace(0, 0.8, 256))
+        viridis_no_yellow = mcolors.ListedColormap(newcolors, name="viridis_no_yellow")
+        cmap_rev = viridis_no_yellow.reversed()
+        norm = mcolors.Normalize(vmin=self.vmin, vmax=self.vmax)
+
         # Plot GPS points
         for _, row in self.gps.iterrows():
             is_zero = row["trait_value"] == 0.0
+            
+            # Use categorical colors if legend is enabled, otherwise use gradient
+            if self.color_map and self.legend_config.get('show_legend', False):
+                color = self._get_color_from_trait(row["trait_value"])
+            else:
+                # Use continuous colormap (gradient)
+                if is_zero:
+                    color = "grey"
+                elif self.vmin < row["trait_value"] < self.vmax:
+                    color = mcolors.to_hex(cmap_rev(norm(row["trait_value"])))
+                else:
+                    color = "black"
+            
             self.ax2.plot(
                 row["longitude"],
                 row["latitude"],
                 "o",
                 markersize=8,
-                markerfacecolor=row["color"],
+                markerfacecolor=color,
                 markeredgewidth=2,
                 markeredgecolor="black",
                 alpha=0.2 if is_zero else 1.0,
             )
 
-        # Add trait colorbar
-        sm = mpl.cm.ScalarMappable(norm=norm, cmap=cmap_rev)
-        cbar = self.fig.colorbar(
-            sm,
-            ax=self.ax_tree,
-            orientation="vertical",
-            pad=0.02,
-            location="left",
-            shrink=0.9,
-            aspect=30,
-        )
-        cbar.set_label(self.trait_name, fontsize=20)
-        cbar.ax.tick_params(labelsize=18)
+        # Add trait colorbar (skip if legend is shown)
+        if not self.legend_config['show_legend']:
+            sm = mpl.cm.ScalarMappable(norm=norm, cmap=cmap_rev)
+            cbar = self.fig.colorbar(
+                sm,
+                ax=self.ax_tree,
+                orientation="vertical",
+                pad=0.02,
+                location="left",
+                shrink=0.9,
+                aspect=30,
+            )
+            cbar.set_label(self.trait_name, fontsize=20)
+            cbar.ax.tick_params(labelsize=18)
+            
+            if self.verbose:
+                print(f"  ✓ Colorbar added")
 
         # ============================
         # CONNECTION LINES
         # ============================
+        
+        # Build colormap for continuous gradient (if not already built for non-categorical mode)
+        if not (self.color_map and self.legend_config.get('show_legend', False)):
+            # Only build if we haven't already (to avoid duplicate code)
+            base = plt.get_cmap("viridis")
+            newcolors = base(np.linspace(0, 0.8, 256))
+            viridis_no_yellow = mcolors.ListedColormap(newcolors, name="viridis_no_yellow")
+            cmap_rev = viridis_no_yellow.reversed()
+            norm = mcolors.Normalize(vmin=self.vmin, vmax=self.vmax)
 
+        # Group GPS data by specimen without assuming "color" column exists
         gps_grouped = (
-            self.gps.groupby("specimen_id")[["longitude", "latitude", "color"]]
-            .apply(lambda x: list(zip(x["longitude"], x["latitude"], x["color"])))
+            self.gps.groupby("specimen_id")[["longitude", "latitude", "trait_value"]]
+            .apply(lambda x: list(zip(x["longitude"], x["latitude"], x["trait_value"])))
             .to_dict()
         )
-        trait_dict = dict(zip(self.gps["specimen_id"], self.gps["trait_value"]))
 
         for index, row in df.iterrows():
             specimen = row["ID"]
             if specimen in gps_grouped:
-                for longitude, latitude, color in gps_grouped[specimen]:
-                    trait_val = trait_dict.get(specimen, 0.0)
+                for longitude, latitude, trait_val in gps_grouped[specimen]:
+                    # Use categorical colors if legend is enabled, otherwise use gradient
+                    if self.color_map and self.legend_config.get('show_legend', False):
+                        color = self._get_color_from_trait(trait_val)
+                    else:
+                        # Use continuous colormap (gradient)
+                        is_zero = trait_val == 0.0
+                        if is_zero:
+                            color = "grey"
+                        elif self.vmin < trait_val < self.vmax:
+                            color = mcolors.to_hex(cmap_rev(norm(trait_val)))
+                        else:
+                            color = "black"
+                    
                     lw = 2.0 if trait_val > 0 else 0.8
-                    line_alpha = 0.5 if color == "grey" else 0.2
+                    # Use higher alpha for gradient lines, keep grey semi-transparent
+                    line_alpha = 0.3 if color == "grey" else 0.5
 
                     con = ConnectionPatch(
                         xyA=row["Coordinates"],
@@ -630,15 +767,72 @@ class PhyloCartoPlotter:
         if self.verbose:
             print(f"  ✓ Connection lines drawn")
 
+        # ============================
+        # CATEGORICAL LEGEND (Optional)
+        # ============================
+        if self.legend_config['show_legend']:
+            # Use provided color_to_label mapping
+            if not self.color_to_label:
+                raise ValueError(
+                    "legend_config['show_legend']=True but color_to_label is not provided. "
+                    "Please provide color_to_label dict mapping colors to labels."
+                )
+            
+            # Create legend handles from provided color_to_label mapping
+            legend_handles = [
+                mlines.Line2D(
+                    [], [],
+                    color=color,
+                    marker="o",
+                    markersize=self.legend_config['marker_size'],
+                    markeredgecolor=self.legend_config['marker_edge_color'],
+                    linestyle="None",
+                    label=label
+                )
+                for color, label in self.color_to_label.items()
+            ]
+            
+            # Add legend to map axes
+            legend = self.ax2.legend(
+                handles=legend_handles,
+                title=self.legend_config['title'],
+                loc=self.legend_config['loc'],
+                bbox_to_anchor=self.legend_config['bbox_to_anchor'],
+                fontsize=self.legend_config['fontsize'],
+                title_fontsize=self.legend_config['title_fontsize'],
+                frameon=self.legend_config['frameon'],
+                markerscale=self.legend_config['markerscale'],
+                framealpha=self.legend_config['framealpha'],
+                edgecolor=self.legend_config['edgecolor'],
+                fancybox=self.legend_config['fancybox'],
+                shadow=self.legend_config['shadow'],
+            )
+            
+            # Explicitly set legend position for Cartopy axes
+            # (bbox_to_anchor alone doesn't always work with Cartopy)
+            if legend:
+                # Position in figure coordinates (0-1 range)
+                # Center below the map panel, positioned higher
+                legend.set_bbox_to_anchor(
+                    (0.70, 0.12),  # Below map, higher up from bottom
+                    transform=self.fig.transFigure
+                )
+                # Prevent legend from being clipped
+                legend.set_clip_on(False)
+            
+            if self.verbose:
+                print(f"  ✓ Categorical legend added at bottom left")
+
         # Adjust spacing based on whether we have raster or map
         if self.raster_data is not None:
             # Raster mode: space for colorbar on right
-            self.fig.subplots_adjust(wspace=0.2)
+            self.fig.subplots_adjust(wspace=0.2, bottom=0.08, left=0.15)
         else:
-            # Map mode: no colorbar on right, tighter spacing
-            self.fig.subplots_adjust(wspace=0.05)
+            # Map mode: legend will overlay, no extra bottom space needed
+            self.fig.subplots_adjust(wspace=0.05, bottom=0.08, left=0.1)
 
-        plt.tight_layout()
+        # NOTE: Removed plt.tight_layout() as it overrides legend positioning
+        # Use subplots_adjust() instead for better control
 
         return self.fig
 
@@ -706,9 +900,10 @@ Examples:
   python tree_to_map_raster.py --nwk tree.nwk --gps gps.csv --offset offsets.csv \\
       --raster enviro.tif --raster-band 1
   
-  # With raster and contrast enhancement
+  # With categorical legend (Cumacea)
   python tree_to_map_raster.py --nwk tree.nwk --gps gps.csv --offset offsets.csv \\
-      --raster enviro.tif --raster-band 1 --raster-contrast histogram_eq
+      --color-map-file colors.json --show-legend \\
+      --legend-title "Marine Basins"
   
   # Custom extent and trait range
   python tree_to_map_raster.py --nwk tree.nwk --gps gps.csv --offset offsets.csv \\
@@ -776,9 +971,72 @@ Examples:
     parser.add_argument(
         "--trait-name", type=str, default="Trait Value", help="Name of the trait"
     )
+    parser.add_argument(
+        "--color-map-file",
+        type=str,
+        default=None,
+        help="Path to JSON file with color_map and color_to_label dictionaries"
+    )
+    parser.add_argument(
+        "--show-legend",
+        action="store_true",
+        help="Show categorical legend instead of continuous colorbar"
+    )
+    parser.add_argument(
+        "--legend-title",
+        type=str,
+        default=None,
+        help="Title for the categorical legend"
+    )
+    parser.add_argument(
+        "--legend-loc",
+        type=str,
+        default="lower right",
+        help="Legend position (default: lower right)"
+    )
+    parser.add_argument(
+        "--legend-fontsize",
+        type=int,
+        default=10,
+        help="Legend font size (default: 10)"
+    )
     parser.add_argument("--output", type=str, default=None, help="Output directory")
 
     args = parser.parse_args()
+
+    # Load color mappings from JSON file if provided
+    color_map = None
+    color_to_label = None
+    
+    if args.color_map_file:
+        try:
+            with open(args.color_map_file, 'r') as f:
+                config = json.load(f)
+            
+            # Extract color_map and color_to_label from JSON
+            if 'color_map' in config:
+                color_map = {int(k): v for k, v in config['color_map'].items()}
+            if 'color_to_label' in config:
+                color_to_label = config['color_to_label']
+            
+            print(f"✓ Loaded color mappings from {args.color_map_file}")
+        except Exception as e:
+            print(f"✗ Error loading color map file: {e}")
+            raise
+    
+    # Set up legend config
+    legend_config = None
+    if args.show_legend:
+        if not color_to_label:
+            raise ValueError(
+                "--show-legend requires --color-map-file with color_to_label"
+            )
+        legend_config = {
+            'show_legend': True,
+            'title': args.legend_title,
+            'loc': args.legend_loc,
+            'fontsize': args.legend_fontsize,
+        }
 
     # Create plotter
     plotter = PhyloCartoPlotter(
@@ -794,6 +1052,9 @@ Examples:
         vmin=args.vmin,
         vmax=args.vmax,
         trait_name=args.trait_name,
+        color_map=color_map,
+        color_to_label=color_to_label,
+        legend_config=legend_config,
         verbose=True,
     )
 
