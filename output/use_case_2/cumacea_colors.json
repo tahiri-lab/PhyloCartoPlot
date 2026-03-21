@@ -11,14 +11,14 @@
     "9": "brown"
   },
   "color_to_label": {
-    "red": "Bassin d'Islande",
-    "blue": "Bassin d'Irminger",
-    "green": "Détroit du Danemark",
-    "purple": "Détroit du Danemark (Purple)",
-    "orange": "Bassin Norvégien",
-    "cyan": "Détroit du Danemark (Cyan)",
-    "magenta": "Mer de Norvège",
-    "grey": "Mer de Norvège (Grey)",
-    "brown": "Bassin d'Irminger (Brown)"
+    "red": "Iceland Basin",
+    "blue": "Irminger Basin",
+    "green": "Denmark Strait",
+    "purple": "Denmark Strait",
+    "orange": "Norwegian Basin",
+    "cyan": "Denmark Strait",
+    "magenta": "Norwegian Sea",
+    "grey": "Norwegian Sea",
+    "brown": "Irminger Basin"
   }
 }
