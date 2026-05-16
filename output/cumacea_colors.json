@@ -1,0 +1,24 @@
+{
+  "color_map": {
+    "1": "red",
+    "2": "blue",
+    "3": "green",
+    "4": "purple",
+    "5": "orange",
+    "6": "navy",
+    "7": "magenta",
+    "8": "grey",
+    "9": "brown"
+  },
+  "color_to_label": {
+    "red": "Iceland Basin",
+    "blue": "Irminger Basin",
+    "green": "Denmark Strait",
+    "purple": "Denmark Strait",
+    "orange": "Norwegian Basin",
+    "navy": "Denmark Strait",
+    "magenta": "Norwegian Sea",
+    "grey": "Norwegian Sea",
+    "brown": "Irminger Basin"
+  }
+}
