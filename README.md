@@ -1,4 +1,86 @@
-# PhyloCartoPlot Documentation
+# PhyloCartoPlot
+
+**PhyloCartoPlot** is a Python tool for phylogeographic visualization. It overlays phylogenetic trees on geographic raster maps, letting researchers explore the spatial distribution of evolutionary relationships and trait variation across species.
+
+---
+
+## Key Features
+
+- Integrates GBIF occurrence data with phylogenetic trees
+- Renders trees directly on GeoTIFF raster base maps (e.g. environmental data)
+- Supports arbitrary traits via a generic `trait_value` column
+- Works with any taxa, geographic region, or raster dataset
+- Usable as a Python library (Jupyter) or command-line tool
+
+---
+
+## Requirements
+
+- Python ≥ 3.8
+- [Biopython](https://biopython.org/) – tree construction and parsing
+- [Cartopy](https://scitools.org.uk/cartopy/) – geographic projections
+- [Rasterio](https://rasterio.readthedocs.io/) – raster data I/O
+- [Matplotlib](https://matplotlib.org/) – plotting
+- pandas, numpy, scikit-image
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/tahiri-lab/PhyloCartoPlot.git
+cd PhyloCartoPlot
+pip install -e .
+```
+
+---
+
+## Quick Start
+
+### 1 – Format GBIF occurrence data
+
+```bash
+python -m phylocartoplot.preprocessing.format_gbif_data \
+    examples/sample_data/use_case_1/gbif_coffea_ex3.csv \
+    examples/sample_data/use_case_1/node_names.csv
+```
+
+### 2 – Add trait metadata
+
+```bash
+python -m phylocartoplot.preprocessing.add_metadata \
+    examples/sample_data/use_case_1/gbif_coffea_ex3_formatted.csv \
+    examples/sample_data/use_case_1/no_caffeine_nodes_w_specimen.csv
+```
+
+### 3 – Build phylogenetic tree
+
+```bash
+python -m phylocartoplot.preprocessing.build_phylogenetic_tree \
+    sequences.fasta
+```
+
+### 4 – Visualize
+
+```python
+from phylocartoplot.visualisation.tree_to_map_raster import PhyloCartoPlotter
+
+plotter = PhyloCartoPlotter(
+    nwk_file="sequences_tree.nwk",
+    gps_file="examples/sample_data/use_case_1/coords_w_caff.csv",
+    offset_file="examples/sample_data/use_case_1/offsets_caff.csv",
+    raster_file="enviro.tif",
+    raster_band=1
+)
+plotter.plot()
+plotter.save(output_dir="output")
+```
+
+Or use the interactive walkthrough notebooks in `examples/use_case_1/`.
+
+---
+
+## Documentation
 
 Complete documentation for the PhyloCartoPlot workflow.
 

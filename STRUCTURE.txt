@@ -1,0 +1,76 @@
+PhyloCartoPlot – Project Structure
+====================================
+
+PhyloCartoPlot/
+│
+├── README.md                          Main project documentation and quick-start guide
+├── PIPELINE.md                        Technical pipeline documentation (this workflow)
+├── STRUCTURE.txt                      This file – project layout overview
+├── pyproject.toml                     Python packaging metadata (PEP 517/518)
+├── setup.py                           Legacy setup configuration for pip install
+├── .gitignore                         Git ignore rules
+│
+├── phylocartoplot/                    Main Python package
+│   ├── __init__.py                    Package initialisation
+│   │
+│   ├── preprocessing/                 Data preparation modules
+│   │   ├── __init__.py                Package initialisation
+│   │   ├── format_gbif_data.py        Step 1 – Match GBIF specimen IDs with geographic coordinates
+│   │   ├── add_metadata.py            Step 2 – Merge trait/metadata values with occurrence data
+│   │   ├── build_phylogenetic_tree.py Step 3 – Build NJ phylogenetic tree from FASTA alignment
+│   │   └── prepare_data.py            Orchestrator – run the full preprocessing pipeline
+│   │
+│   └── visualisation/                 Visualization module
+│       ├── __init__.py                Package initialisation
+│       ├── tree_to_map_raster.py      Step 4 – Render phylogenetic tree on a geographic raster map
+│       └── archive/                   Historical / experimental versions (not part of active pipeline)
+│           ├── tree_to_map.py
+│           ├── tree_to_map_generic.py
+│           ├── tree_to_map_raster copy.py
+│           ├── tree_to_map_raster_caffeine.py
+│           └── tree_to_map_raster_v0.3.py
+│
+├── examples/                          Example notebooks and sample data
+│   ├── use_case_1/                    Use case 1 – Coffea genus with caffeine trait
+│   │   ├── 01_phylocartoplot_walkthrough.ipynb      Full pipeline walkthrough
+│   │   └── 02_tree_to_map_raster_walkthrough.ipynb  Visualization-only walkthrough
+│   │
+│   ├── use_case_2/                    Use case 2 – Cumacea marine organisms
+│   │   ├── 03_tree_to_map_walkthrough.ipynb
+│   │   └── archive/                   Archived notebooks for use case 2
+│   │       ├── 01_phylocartoplot_walkthrough.ipynb
+│   │       └── PhyloCartoPlot_Cumacea_Example.ipynb
+│   │
+│   └── sample_data/                   Ready-to-use sample datasets
+│       ├── env_metadata.json          Band descriptions for the environmental raster
+│       ├── env_data_format.json       Expected data format specification
+│       ├── use_case_1/                Sample data for use case 1 (Coffea)
+│       │   ├── gbif_coffea_ex3.csv                Raw GBIF occurrence data
+│       │   ├── gbif_coffea_ex3_formatted.csv       After format_gbif_data.py
+│       │   ├── gbif_coffea_ex3_w_metadata.csv      After add_metadata.py
+│       │   ├── gbif_coffea_ex3_w_caffeine.csv      Caffeine-annotated occurrence data
+│       │   ├── node_names.csv                      Phylogenetic node name list
+│       │   ├── no_caffeine_nodes_w_specimen.csv    Metadata file for caffeine trait
+│       │   ├── coords_w_caff.csv                   Coordinates with caffeine data
+│       │   ├── coords_w_caff_wout_no_caff_nodes.csv Filtered coordinates
+│       │   └── offsets_caff.csv                    Node drawing offsets
+│       └── use_case_2/                Sample data for use case 2 (Cumacea)
+│           ├── Dataset_Tree_ID_1.csv
+│           ├── Dataset_Tree_ID_3.csv
+│           ├── Updated_Dataset_Tree_ID.csv
+│           ├── Updated_Dataset_Tree_ID_3.csv
+│           └── offsets0.csv
+│
+├── workflow/                          Workflow diagrams and documentation assets
+│   └── docs/                          DrawIO diagram files
+│       ├── pipeline.drawio            Full pipeline diagram
+│       ├── coord_transformations.drawio  Coordinate transformation diagram
+│       └── Ex1_raster.drawio          Use case 1 raster example diagram
+│
+├── data/                              Runtime data directory
+│   └── output/
+│       └── use_case_2/
+│           └── cumacea_colors.json    Colour configuration for Cumacea visualization
+│
+└── output/                            Default output directory for generated plots
+    └── cumacea_colors.json            Colour configuration (top-level copy)
