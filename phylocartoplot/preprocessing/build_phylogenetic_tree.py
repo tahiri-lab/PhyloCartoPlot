@@ -12,7 +12,19 @@ def custom_label(clade):
 
 def build_tree(fasta_file):
     # Step 1: Parse sequences from the FASTA file
-    alignment = AlignIO.read(fasta_file, "fasta")
+    try:
+        alignment = AlignIO.read(fasta_file, "fasta")
+    except ValueError as error:
+        if "same length" not in str(error):
+            raise
+
+        records = list(SeqIO.parse(fasta_file, "fasta"))
+        if not records:
+            raise
+        max_length = max(len(record.seq) for record in records)
+        for record in records:
+            record.seq = record.seq + ("-" * (max_length - len(record.seq)))
+        alignment = AlignIO.MultipleSeqAlignment(records)
 
     # Step 2: Calculate distance matrix
     calculator = DistanceCalculator('identity')

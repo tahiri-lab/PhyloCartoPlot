@@ -15,11 +15,13 @@ def format_gbif(csv_file, nodes_file):
     # Function to extract part of the specimen_id for matching
     def extract_name(specimen_id):
         # Use regex to extract pattern (e.g., everything before the underscore)
-        return re.sub(r'_\d+', '', specimen_id)
+        return re.sub(r'_\d+$', '', str(specimen_id)).lower()
 
     # Apply extraction function to both DataFrames
     df_gbif['key'] = df_gbif['specimen_id'].apply(extract_name)
-    df_node['key'] = df_node['node_name'].apply(lambda x: re.sub(r'^C_|_[\dA-Za-z]+$', '', x))
+    df_node['key'] = df_node['node_name'].apply(
+        lambda x: re.sub(r'_A\d+$', '', re.sub(r'^C_', '', str(x), flags=re.IGNORECASE), flags=re.IGNORECASE).lower()
+    )
 
     # Create a dictionary for mapping key to Node Name
     mapping = df_node.set_index('key')['node_name'].to_dict()

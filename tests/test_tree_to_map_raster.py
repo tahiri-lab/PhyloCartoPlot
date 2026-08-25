@@ -41,8 +41,9 @@ class TestPhyloCartoPlotter:
         tree_content = "((seq1:0.1,seq2:0.1):0.2,(seq3:0.15,seq4:0.15):0.15);"
         with tempfile.NamedTemporaryFile(mode='w', suffix='.nwk', delete=False) as f:
             f.write(tree_content)
-            yield f.name
-        os.unlink(f.name)
+            tree_file = f.name
+        yield tree_file
+        os.unlink(tree_file)
 
     @pytest.fixture
     def sample_gps_file(self):
@@ -56,8 +57,9 @@ class TestPhyloCartoPlotter:
         df = pd.DataFrame(data)
         with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
             df.to_csv(f.name, index=False)
-            yield f.name
-        os.unlink(f.name)
+            gps_file = f.name
+        yield gps_file
+        os.unlink(gps_file)
 
     @pytest.fixture
     def sample_offset_file(self):
@@ -69,8 +71,9 @@ class TestPhyloCartoPlotter:
         df = pd.DataFrame(data)
         with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
             df.to_csv(f.name, index=False)
-            yield f.name
-        os.unlink(f.name)
+            offset_file = f.name
+        yield offset_file
+        os.unlink(offset_file)
 
     def test_phylocartoplotter_initialization(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test PhyloCartoPlotter initialization."""
