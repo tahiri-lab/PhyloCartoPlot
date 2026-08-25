@@ -86,7 +86,7 @@ Complete documentation for the PhyloCartoPlot workflow.
 
 ## Files
 
-### 1. PIPELINE.md
+### 1. [PIPELINE.md](PIPELINE.md)
 **Technical documentation of the entire workflow**
 
 Explains:
@@ -101,7 +101,7 @@ Explains:
 
 ---
 
-### 2. 01_phylocartoplot_walkthrough.ipynb
+### 2. [01_phylocartoplot_walkthrough.ipynb](examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
 **Interactive step-by-step Jupyter notebook**
 
 Walks through:
@@ -126,8 +126,8 @@ jupyter notebook
 
 Or from project root:
 ```bash
-jupyter notebook examples/01_phylocartoplot_walkthrough.ipynb
-jupyter notebook examples/02_tree_to_map_raster_walkthrough.ipynb
+jupyter notebook examples/use_case_1/01_phylocartoplot_walkthrough.ipynb
+jupyter notebook examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb
 ```
 
 ---
@@ -139,7 +139,7 @@ jupyter notebook examples/02_tree_to_map_raster_walkthrough.ipynb
 
 
 ### Tutorial
-1. Open **01_phylocartoplot_walkthrough.ipynb** (examples folder)
+1. Open **[01_phylocartoplot_walkthrough.ipynb](examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)** (examples folder)
 2. Follow cells step-by-step
 3. Execute and inspect outputs
 
@@ -162,24 +162,27 @@ Next step instructions
 ## Quick Links
 
 **New to PhyloCartoPlot?**
-→ Start with README.md, then run the notebook in this folder
+→ Start with **README.md**, then run the notebook in this folder
 
 **Need technical details?**
-→ Read PIPELINE.md or check source code
+→ Read [PIPELINE.md](PIPELINE.md) or check source code
 
 **Want to understand the structure?**
-→ See STRUCTURE.txt in project root
+→ See [STRUCTURE.txt](STRUCTURE.txt) in project root
 
 **Ready to use the workflow?**
-→ Run the notebook: `jupyter notebook docs/01_phylocartoplot_walkthrough.ipynb`
+→ Run the notebook: `jupyter notebook examples/use_case_1/01_phylocartoplot_walkthrough.ipynb`
 
 ---
 
-## The Tool is Generic
+## Generality and Reusability
 
-PhyloCartoPlot now works with:
-- Any phylogenetic tree
-- Any species or taxa
-- Any geographic region
-- Any trait/metadata (just use `trait_value` column)
-- Any raster or base map
+PhyloCartoPlot is designed as a parameterized, dataset-agnostic workflow. While the provided examples use *Coffea* species occurrence data and a WorldClim raster layer, the pipeline imposes no assumptions specific to that use case. Researchers can apply the tool to any combination of the following inputs:
+
+- **Phylogenetic tree**: any Newick-formatted tree produced by standard inference tools
+- **Taxa**: any group of organisms for which georeferenced occurrence records are available
+- **Geographic region**: any spatial extent, limited only by the chosen raster layer coverage
+- **Trait or metadata**: any continuous or categorical variable supplied via a `trait_value` column in the coordinate file
+- **Raster base map**: any single-band or multi-band GeoTIFF (e.g., climate layers, land-cover, elevation)
+
+To apply the workflow to a new dataset, it is sufficient to substitute the input files and adjust the column names and raster band index accordingly. No modifications to the source code are required for standard use cases.
