@@ -1,0 +1,1 @@
+Overlay phylogenetic trees on geographic raster maps. Combines Newick-formatted trees with GBIF occurrence data and environmental layers (GeoTIFF). Supports arbitrary trait values. Works with any taxa, region, or raster dataset. Includes preprocessing for formatting coordinates, merging metadata, building trees, and visualization via Jupyter or CLI.
