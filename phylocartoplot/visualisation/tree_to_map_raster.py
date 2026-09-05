@@ -580,9 +580,29 @@ class PhyloCartoPlotter:
         )
 
         for txt in self.ax_tree.texts:
-            txt.set_fontsize(20)  # Increased from 12 to 14 for better visibility in raster
+            txt.set_fontsize(16)
             txt.set_fontstyle("italic")
+        ##new
+        # Build connection starting points after the right edge of each tree label
+        # self.fig.canvas.draw()
+        # renderer = self.fig.canvas.get_renderer()
 
+        # label_anchor_dict = {}
+
+        # for txt in self.ax_tree.texts:
+        #     label = txt.get_text()
+
+        #     # Get label bounding box in display coordinates
+        #     bbox = txt.get_window_extent(renderer=renderer)
+
+        #     # Convert the right edge of the label back to tree data coordinates
+        #     x_right_data, y_mid_data = self.ax_tree.transData.inverted().transform(
+        #         (bbox.x1, (bbox.y0 + bbox.y1) / 2)
+        #     )
+
+        #     # Add small padding after label
+        #     label_anchor_dict[label] = (x_right_data + 0.01, y_mid_data)
+        ###
         self.ax_tree.set_frame_on(False)
         self.ax_tree.axis("off")
         self.ax_tree.set_xlim(-0.05, 1)
@@ -610,11 +630,11 @@ class PhyloCartoPlotter:
         self.ax2 = self.fig.add_subplot(122, projection=ccrs.PlateCarree())
         self.ax2.set_extent(self.extent)
 
-# ##to remove
-#         map_width = self.extent[1] - self.extent[0]
-#         map_height = self.extent[3] - self.extent[2]
-#         self.ax2.set_box_aspect(map_height / map_width)
-# ###
+        # ##to remove
+        #         map_width = self.extent[1] - self.extent[0]
+        #         map_height = self.extent[3] - self.extent[2]
+        #         self.ax2.set_box_aspect(map_height / map_width)
+        # ###
         self.ax2.set_frame_on(False)
         self.ax2.axis("off")
 
@@ -765,8 +785,13 @@ class PhyloCartoPlotter:
                     # Use higher alpha for gradient lines, keep grey semi-transparent
                     line_alpha = 0.3 if color == "grey" else 0.5
 
+                    ##new
+                    # start_xy = label_anchor_dict.get(specimen, row["Coordinates"])
+                    ###
+
                     con = ConnectionPatch(
                         xyA=row["Coordinates"],
+                        # xyA=start_xy,
                         coordsA="data",
                         xyB=(longitude, latitude),
                         coordsB="data",
@@ -847,27 +872,36 @@ class PhyloCartoPlotter:
         else:
             # Map mode: legend will overlay, no extra bottom space needed
             self.fig.subplots_adjust(wspace=0.05, bottom=0.08, left=0.1)
-        
-        ### to be removed
-        self.ax_tree.text(
-            -0.02, 1.02, "A)",
-            transform=self.ax_tree.transAxes,
-            fontsize=30,
-            fontweight="bold",
-            va="bottom",
-            ha="left"
-            )
 
-        self.ax2.text(
-            -0.00, 1.01, "B)",
-            transform=self.ax2.transAxes,
-            fontsize=30,
-            fontweight="bold",
-            va="bottom",
-            ha="left"
-            )
+        # ### to be removed
+        # self.fig.canvas.draw()
+
+        # tree_pos = self.ax_tree.get_position()
+        # map_pos = self.ax2.get_position()
+
+        # label_y = max(tree_pos.y1, map_pos.y1) + 0.003
+
+        # self.fig.text(
+        #     tree_pos.x0 + 0.01,
+        #     label_y,
+        #     "A)",
+        #     fontsize=34,
+        #     fontweight="bold",
+        #     va="bottom",
+        #     ha="left",
+        # )
+
+        # self.fig.text(
+        #     map_pos.x0,
+        #     label_y,
+        #     "B)",
+        #     fontsize=34,
+        #     fontweight="bold",
+        #     va="bottom",
+        #     ha="left",
+        # )
         ###
-        
+
         return self.fig
 
     def save(self, output_dir=None, prefix="tree"):
@@ -886,6 +920,7 @@ class PhyloCartoPlotter:
         suffix = "_raster" if self.raster_data is not None else "_map"
         svg_file = output_dir / f"{prefix}_to{suffix}_{timestamp}.svg"
         png_file = output_dir / f"{prefix}_to{suffix}_{timestamp}.png"
+        pdf_file = output_dir / f"{prefix}_to{suffix}_{timestamp}.pdf"
 
         self.fig.savefig(
             str(svg_file),
@@ -909,7 +944,16 @@ class PhyloCartoPlotter:
         if self.verbose:
             print(f"✓ Saved PNG: {png_file}")
 
-        return svg_file, png_file
+        self.fig.savefig(
+            str(pdf_file),
+            format="pdf",
+            bbox_inches="tight",
+            pad_inches=0.02,
+        )
+        if self.verbose:
+            print(f"✓ Saved PNG: {pdf_file}")
+
+        return svg_file, png_file, pdf_file
 
     def show(self):
         """Display the figure."""
