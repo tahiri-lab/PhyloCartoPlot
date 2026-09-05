@@ -48,6 +48,7 @@ images/
 tmp/
 phylocartoplot/visualisation/archive/
 examples/use_case_2/archive/02_tree_to_map_raster_walkthrough.ipynb
+examples/sample_data/
 
 .pytest_cache/
 .coverage
