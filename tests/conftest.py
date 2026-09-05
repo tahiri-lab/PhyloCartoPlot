@@ -5,6 +5,9 @@ Pytest configuration and shared fixtures for PhyloCartoPlot tests.
 import sys
 import os
 from pathlib import Path
+import matplotlib
+
+matplotlib.use("Agg")
 
 # Add the project root to the Python path
 project_root = Path(__file__).parent.parent

@@ -283,12 +283,14 @@ class TestPhyloCartoPlotter:
             )
             
             plotter.plot()
-            svg_file, png_file = plotter.save(output_dir=tmpdir)
+            svg_file, png_file, pdf_file = plotter.save(output_dir=tmpdir)
             
             assert os.path.exists(svg_file)
             assert os.path.exists(png_file)
+            assert os.path.exists(pdf_file)
             assert str(svg_file).endswith('.svg')
             assert str(png_file).endswith('.png')
+            assert str(pdf_file).endswith('.pdf')
 
     def test_phylocartoplotter_close_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test the close method."""
