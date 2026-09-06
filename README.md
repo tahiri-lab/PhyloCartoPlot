@@ -28,7 +28,7 @@ PhyloCartoPlot is available from PyPI:
 pip install phylocartoplot
 ```
 
-PhyloCartoPlot requires **Python 3.10 or later**.
+PhyloCartoPlot requires **Python >= 3.10**.
 
 Main dependencies include:
 
