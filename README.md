@@ -113,11 +113,12 @@ python -m twine upload dist/*
 ```
 
 Releases are also published automatically by the `.github/workflows/publish.yml`
-GitHub Actions workflow whenever a GitHub Release is published (or via manual
-`workflow_dispatch`). This workflow uses
-[PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/), so no API
-token needs to be stored as a repository secret — configure a trusted publisher
-for this repository/workflow in the PyPI project settings.
+GitHub Actions workflow whenever a GitHub Release is published, or manually via
+`workflow_dispatch` (which lets you choose the `pypi` or `testpypi` target).
+This workflow uses [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/),
+so no API token needs to be stored as a repository secret — configure a
+trusted publisher for the `pypi`/`testpypi` GitHub environments in the PyPI
+(and TestPyPI) project settings.
 
 ## License
 

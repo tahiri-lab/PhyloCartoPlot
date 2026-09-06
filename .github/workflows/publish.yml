@@ -4,10 +4,20 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      target:
+        description: "Where to publish the distributions"
+        type: choice
+        options:
+          - pypi
+          - testpypi
+        default: pypi
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.target == 'testpypi' && 'testpypi' || 'pypi' }}
     permissions:
       id-token: write  # required for trusted publishing
       contents: read
@@ -29,4 +39,11 @@ jobs:
         run: python -m twine check dist/*
 
       - name: Publish to PyPI
+        if: ${{ github.event.inputs.target != 'testpypi' }}
         uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Publish to TestPyPI
+        if: ${{ github.event.inputs.target == 'testpypi' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
