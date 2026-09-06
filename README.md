@@ -126,8 +126,9 @@ account-level publishing page:
 - PyPI: <https://pypi.org/manage/account/publishing/>
 - TestPyPI: <https://test.pypi.org/manage/account/publishing/>
 
-using these values (matching the workflow exactly, or PyPI will reject the
-publish with an `invalid-publisher` error):
+using these values, which must match `.github/workflows/publish.yml` exactly
+(repository name, workflow filename, and environment name), or PyPI will
+reject the publish with an `invalid-publisher` error:
 
 | Field                  | Value              |
 | ---------------------- | ------------------- |
