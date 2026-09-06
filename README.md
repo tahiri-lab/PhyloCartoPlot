@@ -83,6 +83,43 @@ Run the test suite with:
 python -m pytest -v
 ```
 
+## Release process
+
+PhyloGeoPlot is packaged with a standard `pyproject.toml` (setuptools backend).
+
+Build the distribution locally:
+
+```bash
+python -m pip install --upgrade pip build twine
+python -m build
+```
+
+Validate the built artifacts before uploading:
+
+```bash
+python -m twine check dist/*
+```
+
+Upload to TestPyPI first to confirm everything works:
+
+```bash
+python -m twine upload --repository testpypi dist/*
+```
+
+Once verified, upload to PyPI:
+
+```bash
+python -m twine upload dist/*
+```
+
+Releases are also published automatically by the `.github/workflows/publish.yml`
+GitHub Actions workflow whenever a GitHub Release is published, or manually via
+`workflow_dispatch` (which lets you choose the `pypi` or `testpypi` target).
+This workflow uses [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/),
+so no API token needs to be stored as a repository secret — configure a
+trusted publisher for the `pypi`/`testpypi` GitHub environments in the PyPI
+(and TestPyPI) project settings.
+
 ## License
 
 PhyloGeoPlot is distributed under the [MIT License](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/LICENSE).
