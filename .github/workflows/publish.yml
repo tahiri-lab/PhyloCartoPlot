@@ -17,7 +17,7 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     environment:
-      name: ${{ github.event.inputs.target == 'testpypi' && 'testpypi' || 'pypi' }}
+      name: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'testpypi') && 'testpypi' || 'pypi' }}
     permissions:
       id-token: write  # required for trusted publishing
       contents: read
@@ -39,11 +39,11 @@ jobs:
         run: python -m twine check dist/*
 
       - name: Publish to PyPI
-        if: ${{ github.event.inputs.target != 'testpypi' }}
+        if: ${{ !(github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'testpypi') }}
         uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Publish to TestPyPI
-        if: ${{ github.event.inputs.target == 'testpypi' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target == 'testpypi' }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
