@@ -69,12 +69,6 @@ The repository contains sample datasets and walkthrough notebooks for:
 
 See the [Examples](https://github.com/tahiri-lab/PhyloGeoPlot/wiki/Examples) page for details.
 
-## Source code
-
-Source code and example data are available on GitHub:
-
-https://github.com/tahiri-lab/PhyloGeoPlot
-
 ## Tests
 
 Run the test suite with:
