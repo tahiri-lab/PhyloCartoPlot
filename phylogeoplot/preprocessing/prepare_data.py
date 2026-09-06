@@ -1,9 +1,9 @@
 import argparse
 import os
 
-from phylocartoplot.preprocessing.format_gbif_data import format_gbif  
-from phylocartoplot.preprocessing.add_metadata import add_metadata
-from phylocartoplot.preprocessing.build_phylogenetic_tree import build_tree
+from phylogeoplot.preprocessing.format_gbif_data import format_gbif
+from phylogeoplot.preprocessing.add_metadata import add_metadata
+from phylogeoplot.preprocessing.build_phylogenetic_tree import build_tree
 
 def main():
     

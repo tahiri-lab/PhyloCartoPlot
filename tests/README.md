@@ -110,7 +110,7 @@ pytest tests/ -m "not slow"
 
 ### Run with coverage report
 ```bash
-pytest tests/ --cov=phylocartoplot --cov-report=html
+pytest tests/ --cov=phylogeoplot --cov-report=html
 ```
 
 ## Test Dependencies
@@ -143,7 +143,7 @@ Describe what the module does.
 import pytest
 import tempfile
 import os
-from phylocartoplot.path.to.module import function_name
+from phylogeoplot.path.to.module import function_name
 
 
 class TestFunctionName:
@@ -184,7 +184,7 @@ To run tests in CI/CD pipeline:
 - name: Run tests
   run: |
     pip install pytest pytest-cov
-    pytest tests/ --cov=phylocartoplot --cov-report=xml
+    pytest tests/ --cov=phylogeoplot --cov-report=xml
 ```
 
 ## Known Issues and Limitations
@@ -196,7 +196,7 @@ To run tests in CI/CD pipeline:
 ## Troubleshooting
 
 ### Import errors
-Ensure the `phylocartoplot` package is properly installed:
+Ensure the `phylogeoplot` package is properly installed:
 ```bash
 pip install -e .
 ```
@@ -221,7 +221,7 @@ When adding new features:
 1. Write tests first (TDD approach)
 2. Implement the feature
 3. Ensure all tests pass: `pytest tests/`
-4. Check coverage: `pytest tests/ --cov=phylocartoplot`
+4. Check coverage: `pytest tests/ --cov=phylogeoplot`
 5. Aim for >80% coverage on new code
 
 ## Contact

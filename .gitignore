@@ -45,7 +45,7 @@ share/python-wheels/
 *.pdf
 output/
 tmp/
-phylocartoplot/visualisation/archive/
+phylogeoplot/visualisation/archive/
 examples/use_case_2/archive/02_tree_to_map_raster_walkthrough.ipynb
 examples/sample_data/
 
