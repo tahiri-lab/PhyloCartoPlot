@@ -60,6 +60,9 @@ Useful pages:
 - [Troubleshooting](https://github.com/tahiri-lab/PhyloGeoPlot/wiki/Troubleshooting)
 - [Citation](https://github.com/tahiri-lab/PhyloGeoPlot/wiki/Citation)
 
+For maintainers: see [`docs/publishing.md`](docs/publishing.md) for the release
+and PyPI publishing process.
+
 ## Examples
 
 The repository contains sample datasets and walkthrough notebooks for:
