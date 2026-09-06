@@ -83,65 +83,6 @@ Run the test suite with:
 python -m pytest -v
 ```
 
-## Release process
-
-PhyloGeoPlot is packaged with a standard `pyproject.toml` (setuptools backend).
-
-Build the distribution locally:
-
-```bash
-python -m pip install --upgrade pip build twine
-python -m build
-```
-
-Validate the built artifacts before uploading:
-
-```bash
-python -m twine check dist/*
-```
-
-Upload to TestPyPI first to confirm everything works:
-
-```bash
-python -m twine upload --repository testpypi dist/*
-```
-
-Once verified, upload to PyPI:
-
-```bash
-python -m twine upload dist/*
-```
-
-Releases are also published automatically by the `.github/workflows/publish.yml`
-GitHub Actions workflow whenever a GitHub Release is published, or manually via
-`workflow_dispatch` (which lets you choose the `pypi` or `testpypi` target).
-This workflow uses [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/),
-so no API token needs to be stored as a repository secret.
-
-**Before the first release**, `phylogeoplot` does not exist as a project on
-PyPI/TestPyPI yet, so the trusted publisher cannot be added from a project's
-settings page. Instead, register a **pending publisher** from the
-account-level publishing page:
-
-- PyPI: <https://pypi.org/manage/account/publishing/>
-- TestPyPI: <https://test.pypi.org/manage/account/publishing/>
-
-using these values, which must match `.github/workflows/publish.yml` exactly
-(repository name, workflow filename, and environment name), or PyPI will
-reject the publish with an `invalid-publisher` error:
-
-| Field                  | Value              |
-| ---------------------- | ------------------- |
-| PyPI project name      | `phylogeoplot`       |
-| Owner                  | `tahiri-lab`         |
-| Repository name        | `PhyloGeoPlot`       |
-| Workflow filename      | `publish.yml`        |
-| Environment name       | `pypi` (PyPI) / `testpypi` (TestPyPI) |
-
-Once the project has been published for the first time, PyPI automatically
-converts the pending publisher into a regular one, visible in the project's
-own "Publishing" settings.
-
 ## License
 
 PhyloGeoPlot is distributed under the [MIT License](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/LICENSE).
