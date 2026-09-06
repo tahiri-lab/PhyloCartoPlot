@@ -7,7 +7,7 @@ from phylocartoplot.preprocessing.build_phylogenetic_tree import build_tree
 
 def main():
     
-    parser = argparse.ArgumentParser(description='PhyloCartoPlot Main script')
+    parser = argparse.ArgumentParser(description='PhyloGeoPlot Main script')
     parser.add_argument('--data', type=str, required=True, help='Path to the file for gbif data')
     parser.add_argument('--nodes', type=str, required=True, help='Path to the file for nodes')
     parser.add_argument('--meta', type=str, required=True, help='Path to the file for add metadata')
@@ -38,4 +38,4 @@ if __name__ == "__main__":
     main()
 
 # example use
-# python .\phylo_carto_plot.py --data ..\input\gbif_coffea_ex3.csv --nodes ..\input\node_names.csv --meta ..\input\no_caffeine_nodes_w_specimen.csv --fasta ..\input\aligned.fasta
+# python .\phylo_geo_plot.py --data ..\input\gbif_coffea_ex3.csv --nodes ..\input\node_names.csv --meta ..\input\no_caffeine_nodes_w_specimen.csv --fasta ..\input\aligned.fasta

@@ -1,6 +1,6 @@
-# PhyloCartoPlot Unit Tests
+# PhyloGeoPlot Unit Tests
 
-This directory contains comprehensive unit tests for the PhyloCartoPlot package.
+This directory contains comprehensive unit tests for the PhyloGeoPlot package.
 
 ## Test Structure
 
@@ -53,7 +53,7 @@ Tests the `build_tree()` function for phylogenetic tree construction:
 - ✅ Scalability with many sequences
 
 ### 4. `test_tree_to_map_raster.py`
-Tests the `PhyloCartoPlotter` visualization class:
+Tests the `PhyloGeoPlotter` visualization class:
 - ✅ Class initialization
 - ✅ Data loading
 - ✅ Auto vmin/vmax calculation
@@ -95,7 +95,7 @@ pytest tests/test_add_metadata.py::TestAddMetadata -v
 
 ### Run specific test method
 ```bash
-pytest tests/test_tree_to_map_raster.py::TestPhyloCartoPlotter::test_phylocartoplotter_initialization -v
+pytest tests/test_tree_to_map_raster.py::TestPhyloGeoPlotter::test_phylogeoplotter_initialization -v
 ```
 
 ### Run tests matching a pattern

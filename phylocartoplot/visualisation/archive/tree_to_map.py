@@ -158,7 +158,7 @@ def value_to_color(val):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="PhyloCartoPlot Main script")
+    parser = argparse.ArgumentParser(description="PhyloGeoPlot Main script")
     parser.add_argument(
         "--nwk", type=str, required=True, help="Path to the file for tree in nwk format"
     )

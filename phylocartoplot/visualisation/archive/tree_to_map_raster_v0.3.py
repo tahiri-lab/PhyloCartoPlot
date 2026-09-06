@@ -1,5 +1,5 @@
 """
-PhyloCartoPlot: Phylogeographic visualization combining phylogenetic trees with raster/geographic data.
+PhyloGeoPlot: Phylogeographic visualization combining phylogenetic trees with raster/geographic data.
 
 Can be used as a CLI tool or imported as classes in Jupyter notebooks.
 
@@ -7,9 +7,9 @@ CLI Usage:
     python tree_to_map_raster.py --nwk <tree.nwk> --gps <gps.csv> --offset <offsets.csv> [options]
 
 Jupyter Usage:
-    from tree_to_map_raster import PhyloCartoPlotter
+    from tree_to_map_raster import PhyloGeoPlotter
 
-    plotter = PhyloCartoPlotter(
+    plotter = PhyloGeoPlotter(
         nwk_file="tree.nwk",
         gps_file="gps.csv",
         offset_file="offsets.csv",
@@ -176,7 +176,7 @@ class RasterMetadata:
         print("=" * 80 + "\n")
 
 
-class PhyloCartoPlotter:
+class PhyloGeoPlotter:
     """
     Main class for creating phylogeographic visualizations.
 
@@ -200,7 +200,7 @@ class PhyloCartoPlotter:
         verbose=True,
     ):
         """
-        Initialize PhyloCartoPlotter.
+        Initialize PhyloGeoPlotter.
 
         Args:
             nwk_file: Path to phylogenetic tree (Newick format)
@@ -249,7 +249,7 @@ class PhyloCartoPlotter:
         """Load all input data."""
         if self.verbose:
             print("=" * 80)
-            print("PhyloCartoPlot: Loading Data")
+            print("PhyloGeoPlot: Loading Data")
             print("=" * 80)
             print(f"\nLoading data...")
             print(f"  Tree:    {self.nwk_file}")
@@ -698,7 +698,7 @@ class PhyloCartoPlotter:
 def main():
     """Command-line interface."""
     parser = argparse.ArgumentParser(
-        description="PhyloCartoPlot: Create phylogeographic visualizations with raster layers",
+        description="PhyloGeoPlot: Create phylogeographic visualizations with raster layers",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -781,7 +781,7 @@ Examples:
     args = parser.parse_args()
 
     # Create plotter
-    plotter = PhyloCartoPlotter(
+    plotter = PhyloGeoPlotter(
         nwk_file=args.nwk,
         gps_file=args.gps,
         offset_file=args.offset,
