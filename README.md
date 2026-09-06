@@ -280,6 +280,49 @@ The current test suite covers:
 - plotting;
 - figure export.
 
+## Building and publishing
+
+PhyloCartoPlot uses a standard `pyproject.toml` (PEP 517/518/621) build configuration
+with `setuptools` as the build backend. To build distributable artifacts locally:
+
+```bash
+python -m pip install --upgrade build twine
+python -m build
+```
+
+This produces a source distribution (`.tar.gz`) and a wheel (`.whl`) in the `dist/`
+directory. Validate the distribution metadata before uploading:
+
+```bash
+twine check dist/*
+```
+
+To upload to [TestPyPI](https://test.pypi.org/) first (recommended for verifying a
+release before publishing it for real):
+
+```bash
+twine upload --repository testpypi dist/*
+```
+
+Then install from TestPyPI to confirm everything works:
+
+```bash
+pip install --index-url https://test.pypi.org/simple/ --no-deps phylocartoplot
+```
+
+Once verified, upload to [PyPI](https://pypi.org/):
+
+```bash
+twine upload dist/*
+```
+
+Releases can also be published automatically via the `.github/workflows/publish.yml`
+GitHub Actions workflow, which runs on every published GitHub Release and uses
+[PyPI Trusted Publishing](https://docs.pypi.org/trusted-publishers/) (OIDC), so no
+PyPI API token needs to be stored as a secret. See the comments at the top of that
+workflow file for the exact PyPI project configuration steps required before the
+first release.
+
 ## Project structure
 
 The main Python package is organized as:
