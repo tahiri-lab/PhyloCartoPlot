@@ -4,7 +4,8 @@
 
 The package is intended for reproducible phylogeographic and biodiversity visualization workflows using standard formats such as Newick trees, CSV occurrence data, and GeoTIFF rasters.
 
-![PhyloCartoPlot tree-to-map visualization](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
+![PhyloCartoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
+
 
 ## Features
 
@@ -140,7 +141,8 @@ Raster support is provided through Rasterio.
 
 PhyloCartoPlot can apply the same trait-based color encoding to phylogenetic elements, mapped occurrences, and connecting lines.
 
-![PhyloCartoPlot trait-colored tree-to-map visualization](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
+![PhyloCartoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
+
 
 This allows phylogenetic relationships, geographic distributions, and quantitative traits to be examined together within a single figure.
 
@@ -177,7 +179,7 @@ Example notebook:
 
 - [Cumacea tree-to-map walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_2/03_tree_to_map_walkthrough.ipynb)
 
-![Tree-to-map Cumacea in North Atlantic](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_cumacea.png)
+![Tree-to-map Cumacea in North Atlantic](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_cumacea.png?raw=1)
 
 Sample data are available under:
 
