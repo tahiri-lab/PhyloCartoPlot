@@ -140,7 +140,7 @@ Raster support is provided through Rasterio.
 
 PhyloCartoPlot can apply the same trait-based color encoding to phylogenetic elements, mapped occurrences, and connecting lines.
 
-![PhyloCartoPlot trait-colored tree-to-map visualization](https://github.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
+![PhyloCartoPlot trait-colored tree-to-map visualization](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
 
 This allows phylogenetic relationships, geographic distributions, and quantitative traits to be examined together within a single figure.
 
@@ -177,7 +177,7 @@ Example notebook:
 
 - [Cumacea tree-to-map walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_2/03_tree_to_map_walkthrough.ipynb)
 
-(https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_cumacea.png)
+![Tree-to-map Cumacea in North Atlantic](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_cumacea.png)
 
 Sample data are available under:
 
