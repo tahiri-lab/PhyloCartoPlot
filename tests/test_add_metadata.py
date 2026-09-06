@@ -8,7 +8,7 @@ import pandas as pd
 import tempfile
 import os
 from pathlib import Path
-from phylocartoplot.preprocessing.add_metadata import add_metadata
+from phylogeoplot.preprocessing.add_metadata import add_metadata
 
 
 class TestAddMetadata:

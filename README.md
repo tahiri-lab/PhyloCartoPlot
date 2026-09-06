@@ -25,7 +25,7 @@ PhyloGeoPlot provides tools to:
 PhyloGeoPlot is available from PyPI:
 
 ```bash
-pip install phylocartoplot
+pip install phylogeoplot
 ```
 
 PhyloGeoPlot requires **Python >= 3.10**.
@@ -49,7 +49,7 @@ A typical workflow consists of preparing occurrence data, optionally adding meta
 ### 1 – Format GBIF occurrence data
 
 ```bash
-python -m phylocartoplot.preprocessing.format_gbif_data \
+python -m phylogeoplot.preprocessing.format_gbif_data \
     gbif_occurrences.csv \
     node_names.csv
 ```
@@ -57,7 +57,7 @@ python -m phylocartoplot.preprocessing.format_gbif_data \
 ### 2 – Add trait metadata
 
 ```bash
-python -m phylocartoplot.preprocessing.add_metadata \
+python -m phylogeoplot.preprocessing.add_metadata \
     gbif_occurrences_formatted.csv \
     trait_metadata.csv
 ```
@@ -65,14 +65,14 @@ python -m phylocartoplot.preprocessing.add_metadata \
 ### 3 – Build a phylogenetic tree
 
 ```bash
-python -m phylocartoplot.preprocessing.build_phylogenetic_tree \
+python -m phylogeoplot.preprocessing.build_phylogenetic_tree \
     sequences.fasta
 ```
 
 ### 4 – Visualize the phylogeny and geographic data
 
 ```python
-from phylocartoplot.visualisation.tree_to_map_raster import PhyloGeoPlotter
+from phylogeoplot.visualisation.tree_to_map_raster import PhyloGeoPlotter
 
 plotter = PhyloGeoPlotter(
     nwk_file="sequences_tree.nwk",
@@ -99,7 +99,7 @@ Phylogenetic trees are supplied in **Newick (`.nwk`)** format.
 Trees may be generated externally or created from aligned sequence data using:
 
 ```bash
-python -m phylocartoplot.preprocessing.build_phylogenetic_tree sequences.fasta
+python -m phylogeoplot.preprocessing.build_phylogenetic_tree sequences.fasta
 ```
 
 ### Geographic occurrence data
@@ -109,7 +109,7 @@ Geographic occurrence data are supplied as CSV files containing taxon or specime
 GBIF occurrence exports can be reformatted using:
 
 ```bash
-python -m phylocartoplot.preprocessing.format_gbif_data
+python -m phylogeoplot.preprocessing.format_gbif_data
 ```
 
 ### Trait metadata
@@ -162,7 +162,7 @@ Trait values such as caffeine concentration can be represented using a continuou
 
 Example notebooks:
 
-- [PhyloGeoPlot walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
+- [PhyloGeoPlot walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_1/01_phylogeoplot_walkthrough.ipynb)
 - [Tree-to-map raster walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb)
 
 Sample data are available under:
@@ -218,7 +218,7 @@ examples/
 For example:
 
 ```bash
-python -m phylocartoplot.preprocessing.format_gbif_data \
+python -m phylogeoplot.preprocessing.format_gbif_data \
     examples/sample_data/use_case_1/gbif_coffea_ex3.csv \
     examples/sample_data/use_case_1/node_names.csv
 ```
@@ -285,7 +285,7 @@ The current test suite covers:
 The main Python package is organized as:
 
 ```text
-phylocartoplot/
+phylogeoplot/
 ├── preprocessing/
 │   ├── add_metadata.py
 │   ├── build_phylogenetic_tree.py

@@ -9,7 +9,7 @@ import tempfile
 import os
 from pathlib import Path
 from unittest.mock import Mock, patch
-from phylocartoplot.visualisation.tree_to_map_raster import (
+from phylogeoplot.visualisation.tree_to_map_raster import (
     PhyloGeoPlotter,
     RasterMetadata
 )

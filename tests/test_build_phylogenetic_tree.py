@@ -7,7 +7,7 @@ import pytest
 import tempfile
 import os
 from Bio import AlignIO, Phylo
-from phylocartoplot.preprocessing.build_phylogenetic_tree import build_tree
+from phylogeoplot.preprocessing.build_phylogenetic_tree import build_tree
 
 
 class TestBuildPhylogeneticTree:

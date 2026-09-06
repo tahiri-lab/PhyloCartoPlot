@@ -8,7 +8,7 @@ import pandas as pd
 import tempfile
 import os
 from pathlib import Path
-from phylocartoplot.preprocessing.format_gbif_data import format_gbif
+from phylogeoplot.preprocessing.format_gbif_data import format_gbif
 
 
 class TestFormatGbif:
