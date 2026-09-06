@@ -1,43 +1,219 @@
 # PhyloCartoPlot
 
-**PhyloCartoPlot** is a Python tool for phylogeographic visualization. It overlays phylogenetic trees on geographic raster maps, letting researchers explore the spatial distribution of evolutionary relationships and trait variation across species.
+**PhyloCartoPlot** is a Python package for linked visualization of phylogenetic trees and geographic occurrence data. It connects taxa displayed in a phylogenetic tree to their geographic locations on a map and can optionally incorporate raster environmental data.
 
----
+The package is intended for reproducible phylogeographic and biodiversity visualization workflows using standard formats such as Newick trees, CSV occurrence data, and GeoTIFF rasters.
 
-## Key Features
+![PhyloCartoPlot tree-to-map visualization](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
 
-- Integrates GBIF occurrence data with phylogenetic trees
-- Renders trees directly on GeoTIFF raster base maps (e.g. environmental data)
-- Supports arbitrary traits via a generic `trait_value` column
-- Works with any taxa, geographic region, or raster dataset
-- Usable as a Python library (Jupyter) or command-line tool
+## Features
 
----
+PhyloCartoPlot provides tools to:
 
-## Requirements
-
-- Python ≥ 3.8
-- [Biopython](https://biopython.org/) – tree construction and parsing
-- [Cartopy](https://scitools.org.uk/cartopy/) – geographic projections
-- [Rasterio](https://rasterio.readthedocs.io/) – raster data I/O
-- [Matplotlib](https://matplotlib.org/) – plotting
-- pandas, numpy, scikit-image
-
----
+- format GBIF occurrence data for downstream analysis;
+- attach trait or environmental metadata to occurrence records;
+- construct phylogenetic trees from aligned sequence data;
+- display phylogenetic trees alongside geographic occurrence maps;
+- link tree tips to mapped occurrence points;
+- apply consistent trait-based color encoding across tree and map components;
+- optionally display environmental raster data;
+- export publication-quality figures in multiple formats.
 
 ## Installation
+
+PhyloCartoPlot is available from PyPI:
+
+```bash
+pip install phylocartoplot
+```
+
+PhyloCartoPlot requires **Python 3.10 or later**.
+
+Main dependencies include:
+
+- Biopython
+- Cartopy
+- Rasterio
+- Matplotlib
+- Pandas
+- NumPy
+- scikit-image
+
+These dependencies are installed automatically by `pip`.
+
+## Basic workflow
+
+A typical workflow consists of preparing occurrence data, optionally adding metadata, building or loading a phylogenetic tree, and generating the linked tree-map visualization.
+
+### 1 – Format GBIF occurrence data
+
+```bash
+python -m phylocartoplot.preprocessing.format_gbif_data \
+    gbif_occurrences.csv \
+    node_names.csv
+```
+
+### 2 – Add trait metadata
+
+```bash
+python -m phylocartoplot.preprocessing.add_metadata \
+    gbif_occurrences_formatted.csv \
+    trait_metadata.csv
+```
+
+### 3 – Build a phylogenetic tree
+
+```bash
+python -m phylocartoplot.preprocessing.build_phylogenetic_tree \
+    sequences.fasta
+```
+
+### 4 – Visualize the phylogeny and geographic data
+
+```python
+from phylocartoplot.visualisation.tree_to_map_raster import PhyloCartoPlotter
+
+plotter = PhyloCartoPlotter(
+    nwk_file="sequences_tree.nwk",
+    gps_file="coordinates.csv",
+    offset_file="offsets.csv",
+    raster_file="enviro.tif",
+    raster_band=1,
+)
+
+plotter.plot()
+plotter.save(output_dir="output")
+```
+
+Raster input is optional. PhyloCartoPlot can also generate linked phylogenetic and geographic visualizations without an environmental raster.
+
+## Input data
+
+PhyloCartoPlot works with standard biological and geospatial data formats.
+
+### Phylogenetic tree
+
+Phylogenetic trees are supplied in **Newick (`.nwk`)** format.
+
+Trees may be generated externally or created from aligned sequence data using:
+
+```bash
+python -m phylocartoplot.preprocessing.build_phylogenetic_tree sequences.fasta
+```
+
+### Geographic occurrence data
+
+Geographic occurrence data are supplied as CSV files containing taxon or specimen identifiers and geographic coordinates.
+
+GBIF occurrence exports can be reformatted using:
+
+```bash
+python -m phylocartoplot.preprocessing.format_gbif_data
+```
+
+### Trait metadata
+
+Additional quantitative traits can be associated with occurrence records and represented using a continuous color scale in the visualization.
+
+Examples include:
+
+- caffeine concentration;
+- environmental measurements;
+- morphological traits;
+- ecological measurements.
+
+### Raster data
+
+Environmental raster data can be supplied as GeoTIFF files.
+
+Examples include:
+
+- elevation;
+- precipitation;
+- temperature;
+- vegetation indices;
+- other continuous environmental variables.
+
+Raster support is provided through Rasterio.
+
+## Trait-based visualization
+
+PhyloCartoPlot can apply the same trait-based color encoding to phylogenetic elements, mapped occurrences, and connecting lines.
+
+![PhyloCartoPlot trait-colored tree-to-map visualization](https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_caff_raster.png)
+
+This allows phylogenetic relationships, geographic distributions, and quantitative traits to be examined together within a single figure.
+
+## Example datasets and walkthroughs
+
+Complete walkthrough notebooks and sample datasets are available in the GitHub repository:
+
+[PhyloCartoPlot GitHub repository](https://github.com/tahiri-lab/PhyloCartoPlot)
+
+The repository currently includes two principal use cases.
+
+### Use case 1 – Malagasy *Coffea*
+
+This example links a phylogenetic tree of Malagasy *Coffea* taxa to specimen occurrence records in Madagascar.
+
+Trait values such as caffeine concentration can be represented using a continuous color scale, and environmental raster layers can be included in the geographic panel.
+
+Example notebooks:
+
+- [PhyloCartoPlot walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
+- [Tree-to-map raster walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb)
+
+Sample data are available under:
+
+```text
+examples/sample_data/use_case_1/
+```
+
+### Use case 2 – North Atlantic Cumacea
+
+This example illustrates linked phylogenetic and geographic visualization for Cumacea taxa distributed across North Atlantic regions.
+
+Example notebook:
+
+- [Cumacea tree-to-map walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_2/03_tree_to_map_walkthrough.ipynb)
+
+(https://raw.githubusercontent.com/tahiri-lab/PhyloCartoPlot/main/images/tree2map_cumacea.png)
+
+Sample data are available under:
+
+```text
+examples/sample_data/use_case_2/
+```
+
+## Running the repository examples
+
+The example datasets and notebooks are maintained in the GitHub repository and are not bundled into the PyPI installation.
+
+To reproduce the examples, clone the repository:
 
 ```bash
 git clone https://github.com/tahiri-lab/PhyloCartoPlot.git
 cd PhyloCartoPlot
-pip install -e .
 ```
 
----
+Install the package in editable mode with the development dependencies:
 
-## Quick Start
+```bash
+pip install -e ".[dev]"
+```
 
-### 1 – Format GBIF occurrence data
+The example files can then be accessed under:
+
+```text
+examples/
+├── sample_data/
+│   ├── use_case_1/
+│   └── use_case_2/
+├── use_case_1/
+└── use_case_2/
+```
+
+For example:
 
 ```bash
 python -m phylocartoplot.preprocessing.format_gbif_data \
@@ -45,144 +221,113 @@ python -m phylocartoplot.preprocessing.format_gbif_data \
     examples/sample_data/use_case_1/node_names.csv
 ```
 
-### 2 – Add trait metadata
+## Output
 
-```bash
-python -m phylocartoplot.preprocessing.add_metadata \
-    examples/sample_data/use_case_1/gbif_coffea_ex3_formatted.csv \
-    examples/sample_data/use_case_1/no_caffeine_nodes_w_specimen.csv
-```
+PhyloCartoPlot can generate linked phylogeny-map figures in formats suitable for exploratory analysis and publication.
 
-### 3 – Build phylogenetic tree
+Depending on the selected options, output may include:
 
-```bash
-python -m phylocartoplot.preprocessing.build_phylogenetic_tree \
-    sequences.fasta
-```
+- SVG;
+- PNG;
+- PDF.
 
-### 4 – Visualize
+Output files can be written to a user-specified directory:
 
 ```python
-from phylocartoplot.visualisation.tree_to_map_raster import PhyloCartoPlotter
-
-plotter = PhyloCartoPlotter(
-    nwk_file="sequences_tree.nwk",
-    gps_file="examples/sample_data/use_case_1/coords_w_caff.csv",
-    offset_file="examples/sample_data/use_case_1/offsets_caff.csv",
-    raster_file="enviro.tif",
-    raster_band=1
-)
-plotter.plot()
 plotter.save(output_dir="output")
 ```
 
-Or use the interactive walkthrough notebooks in `examples/use_case_1/`.
+## Development installation
 
----
-
-## Documentation
-
-Complete documentation for the PhyloCartoPlot workflow.
-
-## Files
-
-### 1. [PIPELINE.md](PIPELINE.md)
-**Technical documentation of the entire workflow**
-
-Explains:
-- Module breakdown (what each script does)
-- Input/output specifications
-- Data flow diagrams
-- Key functions and their purposes
-- Customization points
-- Troubleshooting guide
-
-**Read this for:** Understanding how the pipeline works technically
-
----
-
-### 2. [01_phylocartoplot_walkthrough.ipynb](examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
-**Interactive step-by-step Jupyter notebook**
-
-Walks through:
-- Step 1: Format geographic coordinates
-- Step 2: Add trait/metadata values
-- Step 3: Build phylogenetic tree
-- Step 4: Create visualization
-
-**Read this for:** Hands-on learning, executing the workflow
-
-#### Running the Notebook
+For development or contribution, clone the repository:
 
 ```bash
-# Navigate to docs folder
-cd phylocartoplot/examples
-
-# Start Jupyter
-jupyter notebook
-
-# Open: 01_phylocartoplot_walkthrough.ipynb
+git clone https://github.com/tahiri-lab/PhyloCartoPlot.git
+cd PhyloCartoPlot
 ```
 
-Or from project root:
+Install the package with development dependencies:
+
 ```bash
-jupyter notebook examples/use_case_1/01_phylocartoplot_walkthrough.ipynb
-jupyter notebook examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb
+pip install -e ".[dev]"
 ```
 
----
+Development dependencies currently include:
 
-## How to Use This Documentation
+- pytest
+- Jupyter
 
-### For Quick Understanding
-1. Read the main **README.md** 
+## Tests
+
+The project includes automated tests for preprocessing and visualization components.
+
+Run the test suite with:
+
+```bash
+python -m pytest -v
+```
+
+The current test suite covers:
+
+- metadata integration;
+- GBIF data formatting;
+- phylogenetic tree construction;
+- visualization initialization;
+- trait color mapping;
+- raster configuration;
+- plotting;
+- figure export.
+
+## Project structure
+
+The main Python package is organized as:
+
+```text
+phylocartoplot/
+├── preprocessing/
+│   ├── add_metadata.py
+│   ├── build_phylogenetic_tree.py
+│   ├── format_gbif_data.py
+│   └── prepare_data.py
+│
+└── visualisation/
+    └── tree_to_map_raster.py
+```
+
+Example data, notebooks, workflow documentation, and figures are maintained separately in the GitHub repository.
+
+## Repository resources
+
+Additional project resources are available on GitHub:
+
+- [Source code](https://github.com/tahiri-lab/PhyloCartoPlot)
+- [Example notebooks](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/examples)
+- [Sample datasets](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/examples/sample_data)
+- [Workflow documentation](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/workflow/docs)
 
 
-### Tutorial
-1. Open **[01_phylocartoplot_walkthrough.ipynb](examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)** (examples folder)
-2. Follow cells step-by-step
-3. Execute and inspect outputs
+## Citation
 
+If you use PhyloCartoPlot in a scientific publication, please cite the associated software publication when available.
 
----
+Citation information will be added here following publication.
 
-## Notebook Features
+## License
 
-Automatic path configuration
-Step-by-step explanations
-Data inspection and sampling
-Error checking and reporting
-Clear output messages
-Next step instructions
+PhyloCartoPlot is distributed under the **MIT License**.
 
----
+See the [LICENSE](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/LICENSE) file for details.
 
----
+## Author
 
-## Quick Links
+**Caroline Fortier**
 
-**New to PhyloCartoPlot?**
-→ Start with **README.md**, then run the notebook in this folder
+## Repository
 
-**Need technical details?**
-→ Read [PIPELINE.md](PIPELINE.md) or check source code
+Source code, examples, issues, and development history are available at:
 
-**Want to understand the structure?**
-→ See [STRUCTURE.txt](STRUCTURE.txt) in project root
+[https://github.com/tahiri-lab/PhyloCartoPlot](https://github.com/tahiri-lab/PhyloCartoPlot)
 
-**Ready to use the workflow?**
-→ Run the notebook: `jupyter notebook examples/use_case_1/01_phylocartoplot_walkthrough.ipynb`
+## Contributing
 
----
-
-## Generality and Reusability
-
-PhyloCartoPlot is designed as a parameterized, dataset-agnostic workflow. While the provided examples use *Coffea* species occurrence data and a WorldClim raster layer, the pipeline imposes no assumptions specific to that use case. Researchers can apply the tool to any combination of the following inputs:
-
-- **Phylogenetic tree**: any Newick-formatted tree produced by standard inference tools
-- **Taxa**: any group of organisms for which georeferenced occurrence records are available
-- **Geographic region**: any spatial extent, limited only by the chosen raster layer coverage
-- **Trait or metadata**: any continuous or categorical variable supplied via a `trait_value` column in the coordinate file
-- **Raster base map**: any single-band or multi-band GeoTIFF (e.g., climate layers, land-cover, elevation)
-
-To apply the workflow to a new dataset, it is sufficient to substitute the input files and adjust the column names and raster band index accordingly. No modifications to the source code are required for standard use cases.
+Bug reports, feature requests, and contributions are welcome through the GitHub repository.
