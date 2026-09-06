@@ -3,7 +3,7 @@ requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "phylocartoplot"
+name = "phylogeoplot"
 version = "0.1.4"
 description = "Linked phylogenetic and geographic visualization in Python."
 readme = "README.md"
@@ -43,10 +43,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/tahiri-lab/PhyloCartoPlot"
-Repository = "https://github.com/tahiri-lab/PhyloCartoPlot"
+Homepage = "https://github.com/tahiri-lab/PhyloGeoPlot"
+Repository = "https://github.com/tahiri-lab/PhyloGeoPlot"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["phylocartoplot*"]
+include = ["phylogeoplot*"]
 namespaces = false
