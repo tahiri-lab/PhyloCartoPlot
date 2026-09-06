@@ -354,7 +354,7 @@ def main():
     raster_band = 9  # Which band to display (1-indexed): 1=alt, 2=slo, 3=asp, 4=solrad, 5=geo, 6=soi, 7=veg, 8=wat, 9=forcov
     raster_cmap = "terrain"  # Colormap for raster: "terrain", "viridis", "gray", etc.
 
-    parser = argparse.ArgumentParser(description="PhyloCartoPlot Main script")
+    parser = argparse.ArgumentParser(description="PhyloGeoPlot Main script")
     parser.add_argument(
         "--nwk", type=str, required=True, help="Path to the file for tree in nwk format"
     )

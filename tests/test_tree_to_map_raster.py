@@ -1,6 +1,6 @@
 """
 Unit tests for tree_to_map_raster module.
-Tests the PhyloCartoPlotter visualization class.
+Tests the PhyloGeoPlotter visualization class.
 """
 
 import pytest
@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 from unittest.mock import Mock, patch
 from phylocartoplot.visualisation.tree_to_map_raster import (
-    PhyloCartoPlotter,
+    PhyloGeoPlotter,
     RasterMetadata
 )
 
@@ -32,8 +32,8 @@ class TestRasterMetadata:
             pytest.skip("Requires valid GeoTIFF file")
 
 
-class TestPhyloCartoPlotter:
-    """Test suite for PhyloCartoPlotter class."""
+class TestPhyloGeoPlotter:
+    """Test suite for PhyloGeoPlotter class."""
 
     @pytest.fixture
     def sample_tree_file(self):
@@ -75,9 +75,9 @@ class TestPhyloCartoPlotter:
         yield offset_file
         os.unlink(offset_file)
 
-    def test_phylocartoplotter_initialization(self, sample_tree_file, sample_gps_file, sample_offset_file):
-        """Test PhyloCartoPlotter initialization."""
-        plotter = PhyloCartoPlotter(
+    def test_phylogeoplotter_initialization(self, sample_tree_file, sample_gps_file, sample_offset_file):
+        """Test PhyloGeoPlotter initialization."""
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -89,9 +89,9 @@ class TestPhyloCartoPlotter:
         assert plotter.gps is not None
         assert plotter.offsets_dict is not None
 
-    def test_phylocartoplotter_loads_data_correctly(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_loads_data_correctly(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test that data is loaded correctly."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -102,9 +102,9 @@ class TestPhyloCartoPlotter:
         assert len(plotter.offsets_dict) == 4
         assert 'trait_value' in plotter.gps.columns
 
-    def test_phylocartoplotter_auto_vmin_vmax(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_auto_vmin_vmax(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test automatic vmin/vmax calculation."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -115,9 +115,9 @@ class TestPhyloCartoPlotter:
         assert plotter.vmax is not None
         assert plotter.vmin < plotter.vmax
 
-    def test_phylocartoplotter_custom_vmin_vmax(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_custom_vmin_vmax(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test custom vmin/vmax parameters."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -129,40 +129,40 @@ class TestPhyloCartoPlotter:
         assert plotter.vmin == 0.5
         assert plotter.vmax == 2.0
 
-    def test_phylocartoplotter_missing_tree_file(self, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_missing_tree_file(self, sample_gps_file, sample_offset_file):
         """Test error handling for missing tree file."""
         with pytest.raises(Exception):
-            PhyloCartoPlotter(
+            PhyloGeoPlotter(
                 nwk_file='nonexistent_tree.nwk',
                 gps_file=sample_gps_file,
                 offset_file=sample_offset_file,
                 verbose=False
             )
 
-    def test_phylocartoplotter_missing_gps_file(self, sample_tree_file, sample_offset_file):
+    def test_phylogeoplotter_missing_gps_file(self, sample_tree_file, sample_offset_file):
         """Test error handling for missing GPS file."""
         with pytest.raises(Exception):
-            PhyloCartoPlotter(
+            PhyloGeoPlotter(
                 nwk_file=sample_tree_file,
                 gps_file='nonexistent_gps.csv',
                 offset_file=sample_offset_file,
                 verbose=False
             )
 
-    def test_phylocartoplotter_missing_offset_file(self, sample_tree_file, sample_gps_file):
+    def test_phylogeoplotter_missing_offset_file(self, sample_tree_file, sample_gps_file):
         """Test error handling for missing offset file."""
         with pytest.raises(Exception):
-            PhyloCartoPlotter(
+            PhyloGeoPlotter(
                 nwk_file=sample_tree_file,
                 gps_file=sample_gps_file,
                 offset_file='nonexistent_offsets.csv',
                 verbose=False
             )
 
-    def test_phylocartoplotter_color_mapping(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_color_mapping(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test color mapping for trait values."""
         color_map = {1: "red", 0: "blue"}
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -172,13 +172,13 @@ class TestPhyloCartoPlotter:
         
         assert plotter.color_map == color_map
 
-    def test_phylocartoplotter_legend_config(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_legend_config(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test legend configuration."""
         legend_config = {
             'show_legend': True,
             'title': 'Test Legend'
         }
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -189,10 +189,10 @@ class TestPhyloCartoPlotter:
         assert plotter.legend_config['show_legend'] == True
         assert plotter.legend_config['title'] == 'Test Legend'
 
-    def test_phylocartoplotter_extent_parameter(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_extent_parameter(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test custom extent parameter."""
         extent = [40, 50, -30, -10]
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -202,9 +202,9 @@ class TestPhyloCartoPlotter:
         
         assert plotter.extent == extent
 
-    def test_phylocartoplotter_trait_name(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_trait_name(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test custom trait name."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -214,9 +214,9 @@ class TestPhyloCartoPlotter:
         
         assert plotter.trait_name == 'Caffeine Content (%)'
 
-    def test_phylocartoplotter_value_to_color(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_value_to_color(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test color mapping from trait values."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -232,9 +232,9 @@ class TestPhyloCartoPlotter:
         assert isinstance(color_valid, str)
         assert color_valid.startswith('#') or color_valid in ['black', 'grey']
 
-    def test_phylocartoplotter_get_x_offset(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_get_x_offset(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test getting x-axis offset for nodes."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -244,9 +244,9 @@ class TestPhyloCartoPlotter:
         offset = plotter._get_x_offset('seq1')
         assert isinstance(offset, float) or isinstance(offset, int)
 
-    def test_phylocartoplotter_get_x_offset_missing_node(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_get_x_offset_missing_node(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test getting offset for non-existent node (should return default)."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -256,9 +256,9 @@ class TestPhyloCartoPlotter:
         offset = plotter._get_x_offset('nonexistent_node')
         assert offset == 0  # Default offset
 
-    def test_phylocartoplotter_plot_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_plot_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test the plot method."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -272,10 +272,10 @@ class TestPhyloCartoPlotter:
         assert plotter.ax_tree is not None
         assert plotter.ax2 is not None
 
-    def test_phylocartoplotter_save_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_save_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test the save method."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            plotter = PhyloCartoPlotter(
+            plotter = PhyloGeoPlotter(
                 nwk_file=sample_tree_file,
                 gps_file=sample_gps_file,
                 offset_file=sample_offset_file,
@@ -292,9 +292,9 @@ class TestPhyloCartoPlotter:
             assert str(png_file).endswith('.png')
             assert str(pdf_file).endswith('.pdf')
 
-    def test_phylocartoplotter_close_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_close_method(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test the close method."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -306,9 +306,9 @@ class TestPhyloCartoPlotter:
         
         assert plotter.fig is None or True  # After close, fig is closed
 
-    def test_phylocartoplotter_without_raster(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_without_raster(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test plotter in map mode (no raster)."""
-        plotter = PhyloCartoPlotter(
+        plotter = PhyloGeoPlotter(
             nwk_file=sample_tree_file,
             gps_file=sample_gps_file,
             offset_file=sample_offset_file,
@@ -319,12 +319,12 @@ class TestPhyloCartoPlotter:
         plotter.plot()
         # Should plot map features instead of raster
 
-    def test_phylocartoplotter_raster_contrast_methods(self, sample_tree_file, sample_gps_file, sample_offset_file):
+    def test_phylogeoplotter_raster_contrast_methods(self, sample_tree_file, sample_gps_file, sample_offset_file):
         """Test different raster contrast enhancement methods."""
         methods = ['percentile', 'histogram_eq', 'sigmoid']
         
         for method in methods:
-            plotter = PhyloCartoPlotter(
+            plotter = PhyloGeoPlotter(
                 nwk_file=sample_tree_file,
                 gps_file=sample_gps_file,
                 offset_file=sample_offset_file,

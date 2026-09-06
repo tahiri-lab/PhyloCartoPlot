@@ -1,3 +1,3 @@
 """
-Unit tests for PhyloCartoPlot package.
+Unit tests for PhyloGeoPlot package.
 """

@@ -1,5 +1,5 @@
 """
-PhyloCartoPlot: Phylogeographic visualization combining phylogenetic trees with geographic maps.
+PhyloGeoPlot: Phylogeographic visualization combining phylogenetic trees with geographic maps.
 
 Creates side-by-side visualization with:
 - Left panel: Phylogenetic tree colored by trait values
@@ -148,10 +148,10 @@ def value_to_color(val, vmin, vmax):
 
 
 def main():
-    """Main function for PhyloCartoPlot visualization."""
+    """Main function for PhyloGeoPlot visualization."""
     
     parser = argparse.ArgumentParser(
-        description="PhyloCartoPlot: Create phylogeographic visualizations",
+        description="PhyloGeoPlot: Create phylogeographic visualizations",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -215,7 +215,7 @@ Examples:
     args = parser.parse_args()
 
     print("=" * 70)
-    print("PhyloCartoPlot: Phylogeographic Visualization")
+    print("PhyloGeoPlot: Phylogeographic Visualization")
     print("=" * 70)
     print(f"\nLoading data...")
     print(f"  Tree:    {args.nwk}")

@@ -1,15 +1,15 @@
-# PhyloCartoPlot
+# PhyloGeoPlot
 
-**PhyloCartoPlot** is a Python package for linked visualization of phylogenetic trees and geographic occurrence data. It connects taxa displayed in a phylogenetic tree to their geographic locations on a map and can optionally incorporate raster environmental data.
+**PhyloGeoPlot** is a Python package for linked visualization of phylogenetic trees and geographic occurrence data. It connects taxa displayed in a phylogenetic tree to their geographic locations on a map and can optionally incorporate raster environmental data.
 
 The package is intended for reproducible phylogeographic and biodiversity visualization workflows using standard formats such as Newick trees, CSV occurrence data, and GeoTIFF rasters.
 
-![PhyloCartoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
+![PhyloGeoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
 
 
 ## Features
 
-PhyloCartoPlot provides tools to:
+PhyloGeoPlot provides tools to:
 
 - format GBIF occurrence data for downstream analysis;
 - attach trait or environmental metadata to occurrence records;
@@ -22,13 +22,13 @@ PhyloCartoPlot provides tools to:
 
 ## Installation
 
-PhyloCartoPlot is available from PyPI:
+PhyloGeoPlot is available from PyPI:
 
 ```bash
 pip install phylocartoplot
 ```
 
-PhyloCartoPlot requires **Python >= 3.10**.
+PhyloGeoPlot requires **Python >= 3.10**.
 
 Main dependencies include:
 
@@ -72,9 +72,9 @@ python -m phylocartoplot.preprocessing.build_phylogenetic_tree \
 ### 4 – Visualize the phylogeny and geographic data
 
 ```python
-from phylocartoplot.visualisation.tree_to_map_raster import PhyloCartoPlotter
+from phylocartoplot.visualisation.tree_to_map_raster import PhyloGeoPlotter
 
-plotter = PhyloCartoPlotter(
+plotter = PhyloGeoPlotter(
     nwk_file="sequences_tree.nwk",
     gps_file="coordinates.csv",
     offset_file="offsets.csv",
@@ -86,11 +86,11 @@ plotter.plot()
 plotter.save(output_dir="output")
 ```
 
-Raster input is optional. PhyloCartoPlot can also generate linked phylogenetic and geographic visualizations without an environmental raster.
+Raster input is optional. PhyloGeoPlot can also generate linked phylogenetic and geographic visualizations without an environmental raster.
 
 ## Input data
 
-PhyloCartoPlot works with standard biological and geospatial data formats.
+PhyloGeoPlot works with standard biological and geospatial data formats.
 
 ### Phylogenetic tree
 
@@ -139,9 +139,9 @@ Raster support is provided through Rasterio.
 
 ## Trait-based visualization
 
-PhyloCartoPlot can apply the same trait-based color encoding to phylogenetic elements, mapped occurrences, and connecting lines.
+PhyloGeoPlot can apply the same trait-based color encoding to phylogenetic elements, mapped occurrences, and connecting lines.
 
-![PhyloCartoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
+![PhyloGeoPlot tree-to-map visualization](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/images/tree2map_caff_raster.png?raw=1)
 
 
 This allows phylogenetic relationships, geographic distributions, and quantitative traits to be examined together within a single figure.
@@ -150,7 +150,7 @@ This allows phylogenetic relationships, geographic distributions, and quantitati
 
 Complete walkthrough notebooks and sample datasets are available in the GitHub repository:
 
-[PhyloCartoPlot GitHub repository](https://github.com/tahiri-lab/PhyloCartoPlot)
+[PhyloGeoPlot GitHub repository](https://github.com/tahiri-lab/PhyloGeoPlot)
 
 The repository currently includes two principal use cases.
 
@@ -162,8 +162,8 @@ Trait values such as caffeine concentration can be represented using a continuou
 
 Example notebooks:
 
-- [PhyloCartoPlot walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
-- [Tree-to-map raster walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb)
+- [PhyloGeoPlot walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_1/01_phylocartoplot_walkthrough.ipynb)
+- [Tree-to-map raster walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_1/02_tree_to_map_raster_walkthrough.ipynb)
 
 Sample data are available under:
 
@@ -177,9 +177,9 @@ This example illustrates linked phylogenetic and geographic visualization for Cu
 
 Example notebook:
 
-- [Cumacea tree-to-map walkthrough](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/examples/use_case_2/03_tree_to_map_walkthrough.ipynb)
+- [Cumacea tree-to-map walkthrough](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/examples/use_case_2/03_tree_to_map_walkthrough.ipynb)
 
-![Tree-to-map Cumacea in North Atlantic](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/images/tree2map_cumacea.png?raw=1)
+![Tree-to-map Cumacea in North Atlantic](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/images/tree2map_cumacea.png?raw=1)
 
 Sample data are available under:
 
@@ -194,8 +194,8 @@ The example datasets and notebooks are maintained in the GitHub repository and a
 To reproduce the examples, clone the repository:
 
 ```bash
-git clone https://github.com/tahiri-lab/PhyloCartoPlot.git
-cd PhyloCartoPlot
+git clone https://github.com/tahiri-lab/PhyloGeoPlot.git
+cd PhyloGeoPlot
 ```
 
 Install the package in editable mode with the development dependencies:
@@ -225,7 +225,7 @@ python -m phylocartoplot.preprocessing.format_gbif_data \
 
 ## Output
 
-PhyloCartoPlot can generate linked phylogeny-map figures in formats suitable for exploratory analysis and publication.
+PhyloGeoPlot can generate linked phylogeny-map figures in formats suitable for exploratory analysis and publication.
 
 Depending on the selected options, output may include:
 
@@ -244,8 +244,8 @@ plotter.save(output_dir="output")
 For development or contribution, clone the repository:
 
 ```bash
-git clone https://github.com/tahiri-lab/PhyloCartoPlot.git
-cd PhyloCartoPlot
+git clone https://github.com/tahiri-lab/PhyloGeoPlot.git
+cd PhyloGeoPlot
 ```
 
 Install the package with development dependencies:
@@ -302,23 +302,23 @@ Example data, notebooks, workflow documentation, and figures are maintained sepa
 
 Additional project resources are available on GitHub:
 
-- [Source code](https://github.com/tahiri-lab/PhyloCartoPlot)
-- [Example notebooks](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/examples)
-- [Sample datasets](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/examples/sample_data)
-- [Workflow documentation](https://github.com/tahiri-lab/PhyloCartoPlot/tree/main/workflow/docs)
+- [Source code](https://github.com/tahiri-lab/PhyloGeoPlot)
+- [Example notebooks](https://github.com/tahiri-lab/PhyloGeoPlot/tree/main/examples)
+- [Sample datasets](https://github.com/tahiri-lab/PhyloGeoPlot/tree/main/examples/sample_data)
+- [Workflow documentation](https://github.com/tahiri-lab/PhyloGeoPlot/tree/main/workflow/docs)
 
 
 ## Citation
 
-If you use PhyloCartoPlot in a scientific publication, please cite the associated software publication when available.
+If you use PhyloGeoPlot in a scientific publication, please cite the associated software publication when available.
 
 Citation information will be added here following publication.
 
 ## License
 
-PhyloCartoPlot is distributed under the **MIT License**.
+PhyloGeoPlot is distributed under the **MIT License**.
 
-See the [LICENSE](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/LICENSE) file for details.
+See the [LICENSE](https://github.com/tahiri-lab/PhyloGeoPlot/blob/main/LICENSE) file for details.
 
 ## Author
 
@@ -328,7 +328,7 @@ See the [LICENSE](https://github.com/tahiri-lab/PhyloCartoPlot/blob/main/LICENSE
 
 Source code, examples, issues, and development history are available at:
 
-[https://github.com/tahiri-lab/PhyloCartoPlot](https://github.com/tahiri-lab/PhyloCartoPlot)
+[https://github.com/tahiri-lab/PhyloGeoPlot](https://github.com/tahiri-lab/PhyloGeoPlot)
 
 ## Contributing
 

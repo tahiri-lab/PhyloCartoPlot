@@ -1,5 +1,5 @@
 """
-Pytest configuration and shared fixtures for PhyloCartoPlot tests.
+Pytest configuration and shared fixtures for PhyloGeoPlot tests.
 """
 
 import sys
